@@ -8,23 +8,30 @@ export async function onRequestPost({ request }) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "noreply@yourdomain.com",
-      to: "youremail@example.com",
+      from: "noreply@angstrom-usa.com",
+      to: "gsmith@angstrom-usa.com",
       subject: "New Business Card Order",
       html: `
-        <strong>Name:</strong> ${body.name}<br>
-        <strong>Title:</strong> ${body.title}<br>
-        <strong>Mobile:</strong> ${body.mobile}<br>
-        <strong>Desk:</strong> ${body.desk}<br>
-        <strong>Email:</strong> ${body.email}<br>
-        <strong>Color:</strong> ${body.color}
+        <h3>New Business Card Order</h3>
+        <p><strong>Name:</strong> ${body.name}</p>
+        <p><strong>Title:</strong> ${body.title}</p>
+        <p><strong>Mobile Number:</strong> ${body.mobile}</p>
+        <p><strong>Desk Extension:</strong> ${body.desk}</p>
+        <p><strong>Email:</strong> ${body.email}</p>
+        <p><strong>Card Color:</strong> ${body.color}</p>
       `,
     }),
   });
 
   if (!response.ok) {
-    return new Response(JSON.stringify({ error: "Email failed to send." }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Failed to send email." }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
-  return new Response(JSON.stringify({ success: true }), { status: 200 });
+  return new Response(JSON.stringify({ success: true }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
 }
