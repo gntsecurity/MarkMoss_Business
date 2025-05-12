@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aluminum Business Card Order Form</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">Aluminum Business Card Order Form</h2>
+    <div class="space-y-4">
+      <input id="name" name="name" placeholder="Name" class="input" required>
+      <input id="title" name="title" placeholder="Title" class="input" required>
+      <input id="mobile" name="mobile" placeholder="Mobile Number" class="input" required>
+      <input id="desk" name="desk" placeholder="Desk Extension" class="input">
+      <input id="email" name="email" type="email" placeholder="Email" class="input" required>
+      <select id="color" name="color" class="input" required>
+        <option value="" disabled selected>Select a color</option>
+        <option value="silver">Silver</option>
+        <option value="black">Black</option>
+        <option value="gold">Gold</option>
+      </select>
+      <button onclick="submitOrder()" class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">Submit Order</button>
+      <p id="status" class="text-center text-sm mt-4"></p>
+    </div>
+  </div>
+
+  <script>
+    async function submitOrder() {
+      const status = document.getElementById('status');
+      const data = {
+        name: name.value,
+        title: title.value,
+        mobile: mobile.value,
+        desk: desk.value,
+        email: email.value,
+        color: color.value
+      };
+
+      try {
+        const res = await fetch('/api/send-email', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        status.textContent = res.ok ? 'Order submitted successfully.' : result.error;
+        status.className = `text-center text-sm mt-4 ${res.ok ? 'text-green-600' : 'text-red-600'}`;
+      } catch {
+        status.textContent = 'Something went wrong.';
+        status.className = 'text-center text-red-600 text-sm mt-4';
+      }
+    }
+  </script>
+
+  <style>
+    .input {
+      display: block;
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      margin-top: 0.25rem;
+    }
+  </style>
+</body>
+</html>
